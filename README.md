@@ -27,8 +27,8 @@ This will do the following operations:
 - Change AWX inventory file to include user specifications.Refer [Makefile.variable](#makefilevariable).
 - Launch AWX conatiners.
 - Install Juniper.junos role with user specified version.Refer [Makefile.variable](#makefilevariable).
-- Install python modules required for Juniper.junos role in awx_task conatiner: jxmlease,junos-eznc,jsnappy.
-- Changes roles_path in ansible.cfg for awx_task container.
+- Install python modules required for Juniper.junos role in awx_task container: jxmlease,junos-eznc,jsnappy.
+- Change roles_path in ansible.cfg for awx_task container.
 - If HOST_FILE is mentioned, an inventory with name INVENTORY_NAME is created and host's loaded into it.Refer [Makefile.variable](#makefilevariable).
 
 # Example make
