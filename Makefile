@@ -15,8 +15,8 @@ all:prequisite virtual-env ansible-awx docker-start docker-exec ## install junip
 .PHONY: prequisite
 prequisite:
 	pip install virtualenv
-	rm -rf ./awx ./Juniper-awx $(PWD)/$(PATH_PROJECTS)        
-	mkdir -p $(PWD)/$(PATH_PROJECTS)
+	rm -rf ./awx ./Juniper-awx ($(PROJECT_DATA_DIR)        
+	mkdir -p $(PROJECT_DATA_DIR)
 	
 .PHONY: virtual-env
 virtual-env:
@@ -31,12 +31,12 @@ ansible-awx:
 	
 .PHONY: docker-start 
 docker-start:
-ifneq '$(PATH_PROJECTS)' ''
+ifneq '$(PROJETC_DATA_DIR)' ''
 	@${SED} '/project_data_dir/s/^#//g' $(PWD)/awx/installer/inventory
-	@${SED} 's|project_data_dir=.*|project_data_dir=$(PWD)/$(PATH_PROJECTS)|g' $(PWD)/awx/installer/inventory
+	@${SED} 's|project_data_dir=.*|project_data_dir=$(PROJECT_DATA_DIR)|g' $(PWD)/awx/installer/inventory
 endif
-ifneq '$(DOCKERHUB_VERSION)' ''
-	@${SED} 's/dockerhub_version=.*/dockerhub_version=$(DOCKERHUB_VERSION)/g' $(PWD)/awx/installer/inventory
+ifneq '$(AWX_TASK_TAG)' ''
+	@${SED} 's/dockerhub_version=.*/dockerhub_version=$(AWX_TASK_TAG)/g' $(PWD)/awx/installer/inventory
 endif
 ifneq '$(POSTGRES_DATA_DIR)' ''
 	@${SED} 's|postgres_data_dir=.*|postgres_data_dir=$(POSTGRES_DATA_DIR)|g' $(PWD)/awx/installer/inventory
