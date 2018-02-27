@@ -16,12 +16,20 @@ operational and configuration tasks on devices running Junos OS using [ansible-j
 Clone repo and run make inside Juniper-awx folder
 
 ```
-$ https://github.com/dineshbaburam91/Juniper-awx.git
+$ git clone https://github.com/Juniper/ansible-junos-awx
+$ cd ansible-junos-awx
 $ make or make all
 ```
-
-This will create the virtualenv and install ansible, docker-py, clone and install awx inside the python virtualenv.
-Also, install jsnapy, jxmlease, junos-eznc and juniper ansible inside aws-task docker.
+This will do the following operations:
+- Creates virtual environment Juniper-awx.
+- Install python modules required for the project in the virtualenv: Ansible,docker-py.
+- Clone AWX repository into the Juniper-awx/awx folder
+- Change AWX inventory file to include user specifications.Refer [Makefile.variable](#makefilevariable).
+- Launch AWX conatiners.
+- Install Juniper.junos role with user specified version.Refer [Makefile.variable](#makefilevariable).
+- Install python modules required for Juniper.junos role in awx_task container: jxmlease,junos-eznc,jsnappy.
+- Change roles_path in ansible.cfg for awx_task container.
+- If HOST_FILE is mentioned, an inventory with name INVENTORY_NAME is created and host's loaded into it.Refer [Makefile.variable](#makefilevariable).
 
 # Example make
 
@@ -503,6 +511,20 @@ docker exec -it awx_task /bin/bash -c 'sed -i '/roles_path/s/^#//g' /etc/ansible
 
 ```
 
+After it has finished executing, check whether all containers are up.
+
+```
+$ docker ps
+CONTAINER ID        IMAGE                     COMMAND                  CREATED             STATUS              PORTS                                NAMES
+ee36bb9312bc        ansible/awx_task:latest   "/tini -- /bin/sh -c…"   About an hour ago   Up About an hour    8052/tcp                             awx_task
+bc8652bcf6ea        ansible/awx_web:latest    "/tini -- /bin/sh -c…"   About an hour ago   Up About an hour    0.0.0.0:80->8052/tcp                 awx_web
+fb820f201e0c        memcached:alpine          "docker-entrypoint.s…"   About an hour ago   Up About an hour    11211/tcp                            memcached
+c0b5bfd1bd85        rabbitmq:3                "docker-entrypoint.s…"   About an hour ago   Up About an hour    4369/tcp, 5671-5672/tcp, 25672/tcp   rabbitmq
+4411bd57f8d3        postgres:9.6              "docker-entrypoint.s…"   About an hour ago   Up About an hour    5432/tcp                             postgres
+
+```
+Log into 0.0.0.0:80 or localhost to acess the AWX web UI.
+
 ```
 make docker-remove
   This command will stop and remove the docker container
@@ -537,18 +559,38 @@ This file helps to pass arguments to make file.User can specific the path, name 
 directory.Docker hub version and ansible junos version helps to control the version of the docker and juniper
 ansible-galaxy respectively.
 
-Note:
-- If postgres container keeps on restarting, source the POSTGRES_DATA_DIR into any other location other than /tmp.
-- Ensure docker has permission to bind the location mentioned in Makefile.variable
-
-
 ```
 Example:
 
-PATH_PROJECTS = projects
-DOCKERHUB_VERSION = 1.0.1
-POSTGRES_DATA_DIR = /srv/salt
-ANSIBLE_JUNOS_VERSION = 1.4.3
+PROJECT_DATA_DIR = 
+AWX_TASK_TAG =
+POSTGRES_DATA_DIR =
+ANSIBLE_JUNOS_VERSION =
+HOST_FILE = /etc/ansible/hosts
+INVENTORY_NAME = Hosts
+
 ```
+1. PROJECT_DATA_DIR : Provide absolute path to directory where the ansible projects reside.If the directory is not present Makefile will create the path.
+2. AWX_TASK_TAG: Mention the awx_task tag to be installed.For available versions refer [Dockerhub](https://hub.docker.com/r/ansible/awx_task/tags/).
+3. POSTGRES_DATA_DIR: Provide absolute path to postgres directory.If the directory is not present Makefile will create the path and create folders required for postgres to run.
+4. ANSIBLE_JUNOS_VERSION: Mention the Juniper.junos version to be installed.By default, it installs the latest version.
+5. HOST_FILE: Provide the absolute path to the host file.This option can be only used if PROJECT_DATA_DIR is mentioned.
+By default, it doesnot load any host file.Please ensure that a unique INVENTORY_NAME is mentioned to avoid errors e.g Hosts.
+6. INVENTORY_NAME: The name of the inventory to which HOST_FILE is to be loaded.
 
+Note:
+- If a variable is left blank, it is considered to be built with default values.
+- If postgres container keeps on restarting, source the POSTGRES_DATA_DIR into any other location other than /tmp.
+- Ensure docker has permission to bind the location mentioned in Makefile.variable
 
+## LICENSE
+
+Apache 2.0
+
+## CONTRIBUTORS
+
+Juniper Networks is actively contributing to and maintaining this repo. Please contact jnpr-community-netdev@juniper.net for any queries.
+
+*Contributors:*
+
+- v0.0.1: [Raja Shekar M](https://github.com/rsmekala),[Dinesh Babu R](https://github.com/dineshbaburam91)
