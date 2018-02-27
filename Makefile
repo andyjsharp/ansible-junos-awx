@@ -16,7 +16,7 @@ all:prequisite virtual-env ansible-awx docker-start docker-exec ## install junip
 prequisite:
 	pip install virtualenv
 	rm -rf ./awx ./Juniper-awx $(PROJECT_DATA_DIR)        
-	mkdir -p $(PROJECT_DATA_DIR)
+	
 	
 .PHONY: virtual-env
 virtual-env:
@@ -32,6 +32,7 @@ ansible-awx:
 .PHONY: docker-start 
 docker-start:
 ifneq '$(PROJECT_DATA_DIR)' ''
+	mkdir -P $(PROJECT_DATA_DIR)
 	@${SED} '/project_data_dir/s/^#//g' $(PWD)/awx/installer/inventory
 	@${SED} 's|project_data_dir=.*|project_data_dir=$(PROJECT_DATA_DIR)|g' $(PWD)/awx/installer/inventory
 endif
