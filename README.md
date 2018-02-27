@@ -17,11 +17,19 @@ Clone repo and run make inside Juniper-awx folder
 
 ```
 $ https://github.com/dineshbaburam91/Juniper-awx.git
+$ cd Juniper-awx
 $ make or make all
 ```
-
-This will create the virtualenv and install ansible, docker-py, clone and install awx inside the python virtualenv.
-Also, install jsnapy, jxmlease, junos-eznc and juniper ansible inside aws-task docker.
+This will do the following operations:
+- Create a vitualenv.
+- Install python modules required for the project in the virtualenv: Ansible,docker-py.
+- Clone AWX repository into the Juniper-awx/awx folder
+- Change AWX inventory file to include user specifications.Refer [Makefile.variable](#makefilevariable).
+- Launch AWX conatiners.
+- Install Juniper.junos role with user specified version.Refer [Makefile.variable](#makefilevariable).
+- Install python modules required for Juniper.junos role in awx_task conatiner: jxmlease,junos-eznc,jsnappy.
+- Changes roles_path in ansible.cfg for awx_task container.
+- If HOST_FILE is mentioned, an inventory with name INVENTORY_NAME is created and host's loaded into it.Refer [Makefile.variable](#makefilevariable).
 
 # Example make
 
@@ -537,18 +545,28 @@ This file helps to pass arguments to make file.User can specific the path, name 
 directory.Docker hub version and ansible junos version helps to control the version of the docker and juniper
 ansible-galaxy respectively.
 
-Note:
-- If postgres container keeps on restarting, source the POSTGRES_DATA_DIR into any other location other than /tmp.
-- Ensure docker has permission to bind the location mentioned in Makefile.variable
-
-
 ```
 Example:
 
-PATH_PROJECTS = projects
-DOCKERHUB_VERSION = 1.0.1
-POSTGRES_DATA_DIR = /srv/salt
-ANSIBLE_JUNOS_VERSION = 1.4.3
+PROJECT_DATA_DIR = 
+AWX_TASK_TAG =
+POSTGRES_DATA_DIR =
+ANSIBLE_JUNOS_VERSION =
+HOST_FILE = /etc/ansible/hosts
+INVENTORY_NAME = Hosts
+
 ```
+1. PROJECT_DATA_DIR : Provide absolute path to directory where the ansible projects reside.If the directory is not present Makefile will create the path.
+2. AWX_TASK_TAG: Mention the awx_task tag to be installed.For available versions refer [Dockerhub](https://hub.docker.com/r/ansible/awx_task/tags/).
+3. POSTGRES_DATA_DIR: Provide absolute path to postgres directory.If the directory is not present Makefile will create the path and create folders required for postgres to run.
+4. ANSIBLE_JUNOS_VERSION: Mention the Juniper.junos version to be installed.By default, it installs the latest version.
+5. HOST_FILE: Provide the absolute path to the host file.This option can be only used if PROJECT_DATA_DIR is mentioned.
+By default, it doesnot load any host file.Please ensure that a unique INVENTORY_NAME is mentioned to avoid errors e.g Hosts.
+6. INVENTORY_NAME: The name of the inventory to which HOST_FILE is to be loaded.
+
+Note:
+- If a variable is left blank, it is considered to be built with default values.
+- If postgres container keeps on restarting, source the POSTGRES_DATA_DIR into any other location other than /tmp.
+- Ensure docker has permission to bind the location mentioned in Makefile.variable
 
 
