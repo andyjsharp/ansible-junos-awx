@@ -31,7 +31,7 @@ ansible-awx:
 	
 .PHONY: docker-start 
 docker-start:
-ifneq '$(PROJETC_DATA_DIR)' ''
+ifneq '$(PROJECT_DATA_DIR)' ''
 	@${SED} '/project_data_dir/s/^#//g' $(PWD)/awx/installer/inventory
 	@${SED} 's|project_data_dir=.*|project_data_dir=$(PROJECT_DATA_DIR)|g' $(PWD)/awx/installer/inventory
 endif
