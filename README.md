@@ -16,8 +16,8 @@ operational and configuration tasks on devices running Junos OS using [ansible-j
 Clone repo and run make inside Juniper-awx folder
 
 ```
-$ https://github.com/dineshbaburam91/Juniper-awx.git
-$ cd Juniper-awx
+$ git clone https://github.com/Juniper/ansible-junos-awx
+$ cd ansible-junos-awx
 $ make or make all
 ```
 This will do the following operations:
@@ -511,6 +511,20 @@ docker exec -it awx_task /bin/bash -c 'sed -i '/roles_path/s/^#//g' /etc/ansible
 
 ```
 
+After it has finished executing, check whether all containers are up.
+
+```
+$ docker ps
+CONTAINER ID        IMAGE                     COMMAND                  CREATED             STATUS              PORTS                                NAMES
+ee36bb9312bc        ansible/awx_task:latest   "/tini -- /bin/sh -c…"   About an hour ago   Up About an hour    8052/tcp                             awx_task
+bc8652bcf6ea        ansible/awx_web:latest    "/tini -- /bin/sh -c…"   About an hour ago   Up About an hour    0.0.0.0:80->8052/tcp                 awx_web
+fb820f201e0c        memcached:alpine          "docker-entrypoint.s…"   About an hour ago   Up About an hour    11211/tcp                            memcached
+c0b5bfd1bd85        rabbitmq:3                "docker-entrypoint.s…"   About an hour ago   Up About an hour    4369/tcp, 5671-5672/tcp, 25672/tcp   rabbitmq
+4411bd57f8d3        postgres:9.6              "docker-entrypoint.s…"   About an hour ago   Up About an hour    5432/tcp                             postgres
+
+```
+Log into 0.0.0.0:80 or localhost to acess the AWX web UI.
+
 ```
 make docker-remove
   This command will stop and remove the docker container
@@ -579,4 +593,4 @@ Juniper Networks is actively contributing to and maintaining this repo. Please c
 
 *Contributors:*
 
-[Raja Shekar M](https://github.com/rsmekala), [Dinesh Babu R](https://github.com/dineshbaburam91),
+- v0.0.1: [Raja Shekar M](https://github.com/rsmekala),[Dinesh Babu R](https://github.com/dineshbaburam91)
