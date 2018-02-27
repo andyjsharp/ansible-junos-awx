@@ -569,4 +569,14 @@ Note:
 - If postgres container keeps on restarting, source the POSTGRES_DATA_DIR into any other location other than /tmp.
 - Ensure docker has permission to bind the location mentioned in Makefile.variable
 
+## LICENSE
 
+Apache 2.0
+
+## CONTRIBUTORS
+
+Juniper Networks is actively contributing to and maintaining this repo. Please contact jnpr-community-netdev@juniper.net for any queries.
+
+*Contributors:*
+
+[Raja Shekar M](https://github.com/rsmekala), [Dinesh Babu R](https://github.com/dineshbaburam91),
