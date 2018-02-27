@@ -48,7 +48,7 @@ ifneq '$(POSTGRES_DATA_DIR)' ''
 	@mkdir -p ${POSTGRES_DATA_DIR}/pg_tblspc && touch ${POSTGRES_DATA_DIR}/pg_tblspc/.keep
 endif
 ifneq '$(HOST_FILE)' ''
-	cp $(HOST_FILE) $(PWD)/$(PATH_PROJECTS)/hosts
+	cp $(HOST_FILE) $(PROJECT_DATA_DIR)/hosts
 endif
 
 	. Juniper-awx/bin/activate && \
