@@ -21,7 +21,7 @@ $ cd Juniper-awx
 $ make or make all
 ```
 This will do the following operations:
-- Create a vitualenv.
+- Creates virtual environment Juniper-awx.
 - Install python modules required for the project in the virtualenv: Ansible,docker-py.
 - Clone AWX repository into the Juniper-awx/awx folder
 - Change AWX inventory file to include user specifications.Refer [Makefile.variable](#makefilevariable).
