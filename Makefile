@@ -15,7 +15,7 @@ all:prequisite virtual-env ansible-awx docker-start docker-exec ## install junip
 .PHONY: prequisite
 prequisite:
 	pip install virtualenv
-	rm -rf ./awx ./Juniper-awx ($(PROJECT_DATA_DIR)        
+	rm -rf ./awx ./Juniper-awx $(PROJECT_DATA_DIR)        
 	mkdir -p $(PROJECT_DATA_DIR)
 	
 .PHONY: virtual-env
